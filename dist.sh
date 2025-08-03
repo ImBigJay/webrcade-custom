@@ -1,6 +1,11 @@
 #!/bin/bash
 
+set -euo pipefail
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+export NPM_CONFIG_LEGACY_PEER_DEPS=true
+export NPM_CONFIG_AUDIT=false
+export NPM_CONFIG_FUND=false
 DIST="$DIR/dist"
 DIST_OUT="$DIST/out"
 DIST_OUT_APP="$DIST_OUT/app"
@@ -72,6 +77,7 @@ npm install . || { fail 'Unable to install webrcade dependencies.'; }
 npm link "@webrcade/app-common" || { fail 'Unable to link common.'; }
 npm run build || { fail 'Unable to build webrcade.'; }
 cp -R build/. "$DIST_OUT" || { fail 'failed to copy to out.'; }
+[ -f "$DIST_OUT/config.js" ] || { fail 'config.js manquant dans dist/out'; }
 
 ##
 ## webrcade-app-snes9x
